@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GPS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            max-width: 100px;
+            margin-right: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .btn {
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 180px;
+        }
+        .btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .btn-add {
+            background-color: #4CAF50;
+        }
+        .btn-remove {
+            background-color: #f44336;
+        }
+        .resource-entry {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .resource-entry input {
+            flex: 1;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .modal-content label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .modal-buttons button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .modal-buttons .btn-confirm {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .modal-buttons .btn-cancel {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="logo.png" alt="Logo" class="logo">
+            <div>
+                <h2>DAILY SITE REPORT</h2>
+                <p style="font-size: 14px; margin: 0;">Client: <span id="clientName">Occidental of Oman Inc.</span><br>Contract: <span id="contractName">General Facilities Service Contract.</span></p>
+            </div>
+        </div>
+
+        <form id="reportForm">
+            <!-- Single Entry Fields -->
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <!-- Permit Details -->
+            <div class="form-group">
+                <label for="permitDetails">Permit Details:</label>
+                <div class="resource-entry">
+                    <input type="text" id="permitNumber" placeholder="Permit Number" required>
+                    <input type="time" id="validationTime" placeholder="Validation Time" required>
+                    <input type="time" id="suspensionTime" placeholder="Suspension Time" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="foremanName">Foreman Name:</label>
+                <input type="text" id="foremanName" name="foremanName" required>
+            </div>
+            <div class="form-group">
+                <label for="foremanID">Foreman ID:</label>
+                <input type="text" id="foremanID" name="foremanID" required>
+            </div>
+            <div class="form-group">
+                <label for="wiReference">WI No:</label>
+                <input type="text" id="wiReference" name="wiReference" required>
+            </div>
+            <div class="form-group">
+                <label for="wiTitle">WI Title:</label>
+                <input type="text" id="wiTitle" name="wiTitle" required>
+            </div>
+
+            <!-- Discipline Dropdown -->
+            <div class="form-group">
+                <label for="discipline">Discipline:</label>
+                <select id="discipline" name="discipline" required>
+                    <option value="Other">Other</option>
+                    <option value="Civil Works">Civil Works</option>
+                    <option value="Piping, Structural & Mechanical">Piping, Structural & Mechanical</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Instrumentation">Instrumentation</option>
+                    <option value="Commissioning">Commissioning</option>
+                    <option value="Scaffolding">Scaffolding</option>
+                    <option value="Vendor Support">Vendor Support</option>
+                    <option value="Demolition">Demolition</option>
+                    <option value="Shutdown">Shutdown</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description of Work:</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+
+            <!-- Resource Details -->
+            <div class="form-group">
+                <label for="resourceDetails">Resource Details:</label>
+                <table id="personnelTable">
+                    <thead>
+                        <tr>
+                            <th>Resource ID</th>
+                            <th>Time-In</th>
+                            <th>Time-Out</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Entries will be added here dynamically -->
+                    </tbody>
+                </table>
+                <div class="button-container">
+                    <button type="button" class="btn btn-add" onclick="openModal()">Add Resource</button>
+                    <button type="button" class="btn btn-remove" onclick="removeLastPersonnel()">Remove</button>
+                </div>
+            </div>
+
+            <!-- Issues & Delays -->
+            <div class="form-group">
+                <label for="issuesDelays">Issues & Delays:</label>
+                <select id="issuesDelays" required>
+                    <option value="Normal" selected>Normal</option>
+                    <option value="Technical Challenges">Technical Challenges</option>
+                    <option value="Weather Delays">Weather Delays</option>
+                    <option value="Material / Equipment Shortage">Material / Equipment Shortage</option>
+                    <option value="Manpower Shortage">Manpower Shortage</option>
+                    <option value="Safety Incidents">Safety Incidents</option>
+                    <option value="Heat Stress Break">Heat Stress Break</option>
+                    <option value="Ramadan Break">Ramadan Break</option>
+                    <option value="Equipment Failure">Equipment Failure</option>
+                    <option value="Permit Delay">Permit Delay</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <!-- Notes -->
+            <div class="form-group">
+                <label for="notes">Notes (Optional):</label>
+                <textarea id="notes" name="notes" rows="4"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-add" id="submitButton">Submit</button>
+        </form>
+    </div>
+
+    <!-- Modal for Resource Details Input -->
+    <div id="resourceModal" class="modal">
+        <div class="modal-content">
+            <label for="modalResourceID">Resource ID:</label>
+            <input type="text" id="modalResourceID" placeholder="Enter Resource ID" required>
+
+            <label for="modalTimeIn">Time-in:</label>
+            <input type="time" id="modalTimeIn" placeholder="Enter Time-in" required>
+
+            <label for="modalTimeOut">Time-out:</label>
+            <input type="time" id="modalTimeOut" placeholder="Enter Time-out" required>
+
+            <div class="modal-buttons">
+                <button class="btn-confirm" onclick="addResource()">Confirm</button>
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let personnelEntries = [];
+        let defaultTimeIn = null;
+        let defaultTimeOut = null;
+
+        // Function to open the modal
+        function openModal() {
+            // Set default Time-in and Time-out if available
+            if (defaultTimeIn && defaultTimeOut) {
+                document.getElementById("modalTimeIn").value = defaultTimeIn;
+                document.getElementById("modalTimeOut").value = defaultTimeOut;
+            }
+            document.getElementById("resourceModal").style.display = "flex";
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById("resourceModal").style.display = "none";
+            document.getElementById("modalResourceID").value = ""; // Clear input
+            document.getElementById("modalTimeIn").value = ""; // Reset
+            document.getElementById("modalTimeOut").value = ""; // Reset
+        }
+
+        // Add resource to the table
+        function addResource() {
+            const resourceID = document.getElementById("modalResourceID").value;
+            const timeIn = document.getElementById("modalTimeIn").value;
+            const timeOut = document.getElementById("modalTimeOut").value;
+
+            if (resourceID && timeIn && timeOut) {
+                // Set default Time-in and Time-out from the first resource
+                if (personnelEntries.length === 0) {
+                    defaultTimeIn = timeIn;
+                    defaultTimeOut = timeOut;
+                }
+
+                personnelEntries.push({
+                    id: resourceID,
+                    timeIn: timeIn,
+                    timeOut: timeOut
+                });
+                updatePersonnelTable();
+                closeModal(); // Close the modal after adding
+            } else {
+                alert("Please fill in all fields.");
+            }
+        }
+
+        // Remove the last resource entry
+        function removeLastPersonnel() {
+            if (personnelEntries.length > 0) {
+                personnelEntries.pop();
+                updatePersonnelTable();
+            } else {
+                alert("No entries to remove.");
+            }
+        }
+
+        // Update the personnel table
+        function updatePersonnelTable() {
+            const tbody = document.querySelector("#personnelTable tbody");
+            tbody.innerHTML = personnelEntries.map(entry => `
+                <tr>
+                    <td>${entry.id}</td>
+                    <td>${entry.timeIn}</td>
+                    <td>${entry.timeOut}</td>
+                </tr>
+            `).join("");
+        }
+
+        // Handle form submission
+        document.getElementById("reportForm").onsubmit = function(e) {
+            e.preventDefault();
+
+            if (personnelEntries.length === 0) {
+                alert("Please add at least one resource entry.");
+                return;
+            }
+
+            const submitButton = document.getElementById("submitButton");
+            submitButton.disabled = true;
+            submitButton.innerText = "Submitting...";
+
+            const postingDateTime = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+            const formData = {
+                date: document.getElementById("date").value,
+                foremanName: document.getElementById("foremanName").value,
+                foremanID: document.getElementById("foremanID").value,
+                wiReference: document.getElementById("wiReference").value,
+                wiTitle: document.getElementById("wiTitle").value,
+                discipline: document.getElementById("discipline").value,
+                description: document.getElementById("description").value,
+                personnel: personnelEntries,
+                permitNumber: document.getElementById("permitNumber").value,
+                validationTime: document.getElementById("validationTime").value,
+                suspensionTime: document.getElementById("suspensionTime").value,
+                issuesDelays: document.getElementById("issuesDelays").value,
+                notes: document.getElementById("notes").value,
+                postingDateTime: postingDateTime,
+                deviceDetails: {
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform
+                }
+            };
+
+            const queryParams = new URLSearchParams();
+            for (const [key, value] of Object.entries(formData)) {
+                queryParams.set(key, typeof value === "object" ? JSON.stringify(value) : value);
+            }
+
+            fetch(`https://script.google.com/macros/s/AKfycbxD7mtP_KYnIkmXLQb1gny2sxI9LdEmN1vWuuzp_8zZsOMSJH3qnUPF_9rjAJ9g_WR7/exec?${queryParams.toString()}`, {
+                method: "GET",
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert("Data Submitted Successfully!");
+                personnelEntries = [];
+                defaultTimeIn = null;
+                defaultTimeOut = null;
+                updatePersonnelTable();
+                document.getElementById("reportForm").reset();
+            })
+            .catch(error => {
+                alert("Error: " + error);
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+                submitButton.innerText = "Submit";
+            });
+        };
+    </script>
+</body>
+</html>
