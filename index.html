@@ -394,7 +394,7 @@
                 queryParams.set(key, typeof value === "object" ? JSON.stringify(value) : value);
             }
 
-            fetch(`https://script.google.com/macros/s/AKfycbxD7mtP_KYnIkmXLQb1gny2sxI9LdEmN1vWuuzp_8zZsOMSJH3qnUPF_9rjAJ9g_WR7/exec?${queryParams.toString()}`, {
+            fetch(`https://script.google.com/macros/s/AKfycby91YyxDNNOgZiR0Y6P8OiTAy8zYKkqs4Rznl3RiPNXuN-esU5YbMTnDswwuIz6pCkzFg/exec?${queryParams.toString()}`, {
                 method: "GET",
             })
             .then(response => response.text())
