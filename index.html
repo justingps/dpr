@@ -1,98 +1,130 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>GPS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
     <!-- Add Favicon -->
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
         body {
-            font-family: sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .header {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
         .logo {
             max-width: 100px;
-            margin-right: 20px;
+            height: auto;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
         }
         input[type="text"],
         input[type="date"],
+        input[type="time"],
         textarea,
         select {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             box-sizing: border-box;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #4CAF50;
+            outline: none;
         }
         textarea {
             resize: vertical;
+            min-height: 100px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px;
             text-align: left;
+        }
+        th {
+            background-color: #f9f9f9;
+            font-weight: 600;
         }
         .btn {
             border: none;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 24px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
             font-size: 16px;
             margin: 4px 2px;
             cursor: pointer;
-            border-radius: 4px;
-            width: 180px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
         }
         .btn:disabled {
             background-color: #cccccc;
             cursor: not-allowed;
+            opacity: 0.7;
         }
         .btn-add {
             background-color: #4CAF50;
         }
+        .btn-add:hover:not(:disabled) {
+            background-color: #45a049;
+        }
         .btn-remove {
             background-color: #f44336;
+        }
+        .btn-remove:hover:not(:disabled) {
+            background-color: #da190b;
         }
         .resource-entry {
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
+            flex-wrap: wrap;
         }
         .resource-entry input {
             flex: 1;
-            padding: 8px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            min-width: 120px;
         }
         .button-container {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         /* Modal Styles */
@@ -103,29 +135,36 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.6);
             justify-content: center;
             align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
         }
         .modal-content {
             background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 300px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         .modal-content label {
-            display: block;
             margin-bottom: 10px;
-            font-weight: bold;
+            font-weight: 600;
         }
         .modal-content input {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             box-sizing: border-box;
             border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-bottom: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
         }
         .modal-buttons {
             display: flex;
@@ -133,18 +172,46 @@
             gap: 10px;
         }
         .modal-buttons button {
-            padding: 8px 16px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
         .modal-buttons .btn-confirm {
             background-color: #4CAF50;
             color: white;
         }
+        .modal-buttons .btn-confirm:hover {
+            background-color: #45a049;
+        }
         .modal-buttons .btn-cancel {
             background-color: #f44336;
             color: white;
+        }
+        .modal-buttons .btn-cancel:hover {
+            background-color: #da190b;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .logo {
+                margin-bottom: 15px;
+            }
+            .btn {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .resource-entry {
+                flex-direction: column;
+            }
+            .button-container {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -154,48 +221,48 @@
             <img src="logo.png" alt="Logo" class="logo">
             <div>
                 <h2>DAILY SITE REPORT</h2>
-                <!--  <p style="font-size: 14px; margin: 0;">Client: <span id="clientName">Occidental of Oman Inc.</span><br>Contract: <span id="contractName">General Facilities Service Contract.</span></p>  -->
+                <p style="font-size: 14px; margin: 0;">Client: <span id="clientName">Occidental of Oman Inc.</span><br>Contract: <span id="contractName">General Facilities Service Contract.</span></p>
             </div>
         </div>
 
-        <form id="reportForm">
+        <form id="reportForm" aria-label="Daily Site Report Form">
             <!-- Single Entry Fields -->
             <div class="form-group">
                 <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required>
+                <input type="date" id="date" name="date" required aria-required="true">
             </div>
 
             <!-- Permit Details -->
             <div class="form-group">
-                <label for="permitDetails">Permit Details:</label>
+                <label for="permitNumber">Permit Details:</label>
                 <div class="resource-entry">
-                    <input type="text" id="permitNumber" placeholder="Permit Number" required>
-                    <input type="time" id="validationTime" placeholder="Validation Time" required>
-                    <input type="time" id="suspensionTime" placeholder="Suspension Time" required>
+                    <input type="text" id="permitNumber" placeholder="Permit Number" required aria-required="true">
+                    <input type="time" id="validationTime" placeholder="Validation Time" required aria-required="true">
+                    <input type="time" id="suspensionTime" placeholder="Suspension Time" required aria-required="true">
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="foremanName">Foreman Name:</label>
-                <input type="text" id="foremanName" name="foremanName" required>
+                <input type="text" id="foremanName" name="foremanName" required aria-required="true">
             </div>
             <div class="form-group">
                 <label for="foremanID">Foreman ID:</label>
-                <input type="text" id="foremanID" name="foremanID" required>
+                <input type="text" id="foremanID" name="foremanID" required aria-required="true">
             </div>
             <div class="form-group">
                 <label for="wiReference">WI No:</label>
-                <input type="text" id="wiReference" name="wiReference" required>
+                <input type="text" id="wiReference" name="wiReference" required aria-required="true">
             </div>
             <div class="form-group">
                 <label for="wiTitle">WI Title:</label>
-                <input type="text" id="wiTitle" name="wiTitle" required>
+                <input type="text" id="wiTitle" name="wiTitle" required aria-required="true">
             </div>
 
             <!-- Discipline Dropdown -->
             <div class="form-group">
                 <label for="discipline">Discipline:</label>
-                <select id="discipline" name="discipline" required>
+                <select id="discipline" name="discipline" required aria-required="true">
                     <option value="Other">Other</option>
                     <option value="Civil Works">Civil Works</option>
                     <option value="Piping, Structural & Mechanical">Piping, Structural & Mechanical</option>
@@ -211,13 +278,13 @@
 
             <div class="form-group">
                 <label for="description">Description of Work:</label>
-                <textarea id="description" name="description" rows="4" required></textarea>
+                <textarea id="description" name="description" rows="4" required aria-required="true"></textarea>
             </div>
 
             <!-- Resource Details -->
             <div class="form-group">
-                <label for="resourceDetails">Resource Details:</label>
-                <table id="personnelTable">
+                <label for="personnelTable">Resource Details:</label>
+                <table id="personnelTable" aria-label="Resource Details Table">
                     <thead>
                         <tr>
                             <th>Resource ID</th>
@@ -230,15 +297,15 @@
                     </tbody>
                 </table>
                 <div class="button-container">
-                    <button type="button" class="btn btn-add" onclick="openModal()">Add Resource</button>
-                    <button type="button" class="btn btn-remove" onclick="removeLastPersonnel()">Remove</button>
+                    <button type="button" class="btn btn-add" onclick="openModal()" aria-label="Add Resource">Add Resource</button>
+                    <button type="button" class="btn btn-remove" onclick="removeLastPersonnel()" aria-label="Remove Last Resource">Remove</button>
                 </div>
             </div>
 
             <!-- Issues & Delays -->
             <div class="form-group">
                 <label for="issuesDelays">Issues & Delays:</label>
-                <select id="issuesDelays" required>
+                <select id="issuesDelays" required aria-required="true">
                     <option value="Normal" selected>Normal</option>
                     <option value="Technical Challenges">Technical Challenges</option>
                     <option value="Weather Delays">Weather Delays</option>
@@ -256,29 +323,30 @@
             <!-- Notes -->
             <div class="form-group">
                 <label for="notes">Notes (Optional):</label>
-                <textarea id="notes" name="notes" rows="4"></textarea>
+                <textarea id="notes" name="notes" rows="4" aria-label="Optional Notes"></textarea>
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="btn btn-add" id="submitButton">Submit</button>
+            <button type="submit" class="btn btn-add" id="submitButton" aria-label="Submit Report">Submit</button>
         </form>
     </div>
 
     <!-- Modal for Resource Details Input -->
-    <div id="resourceModal" class="modal">
+    <div id="resourceModal" class="modal" role="dialog" aria-labelledby="resourceModalTitle">
         <div class="modal-content">
+            <h3 id="resourceModalTitle" style="margin-top: 0;">Add Resource</h3>
             <label for="modalResourceID">Resource ID:</label>
-            <input type="text" id="modalResourceID" placeholder="Enter Resource ID" required>
+            <input type="text" id="modalResourceID" placeholder="Enter Resource ID" required aria-required="true">
 
             <label for="modalTimeIn">Time-in:</label>
-            <input type="time" id="modalTimeIn" placeholder="Enter Time-in" required>
+            <input type="time" id="modalTimeIn" placeholder="Enter Time-in" required aria-required="true">
 
             <label for="modalTimeOut">Time-out:</label>
-            <input type="time" id="modalTimeOut" placeholder="Enter Time-out" required>
+            <input type="time" id="modalTimeOut" placeholder="Enter Time-out" required aria-required="true">
 
             <div class="modal-buttons">
-                <button class="btn-confirm" onclick="addResource()">Confirm</button>
-                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-confirm" onclick="addResource()" aria-label="Confirm Resource Addition">Confirm</button>
+                <button class="btn-cancel" onclick="closeModal()" aria-label="Cancel Resource Addition">Cancel</button>
             </div>
         </div>
     </div>
@@ -290,42 +358,37 @@
 
         // Function to open the modal
         function openModal() {
-            // Set default Time-in and Time-out if available
             if (defaultTimeIn && defaultTimeOut) {
                 document.getElementById("modalTimeIn").value = defaultTimeIn;
                 document.getElementById("modalTimeOut").value = defaultTimeOut;
             }
             document.getElementById("resourceModal").style.display = "flex";
+            document.getElementById("modalResourceID").focus();
         }
 
         // Function to close the modal
         function closeModal() {
             document.getElementById("resourceModal").style.display = "none";
-            document.getElementById("modalResourceID").value = ""; // Clear input
-            document.getElementById("modalTimeIn").value = ""; // Reset
-            document.getElementById("modalTimeOut").value = ""; // Reset
+            document.getElementById("modalResourceID").value = "";
+            document.getElementById("modalTimeIn").value = "";
+            document.getElementById("modalTimeOut").value = "";
         }
 
         // Add resource to the table
         function addResource() {
-            const resourceID = document.getElementById("modalResourceID").value;
+            const resourceID = document.getElementById("modalResourceID").value.trim();
             const timeIn = document.getElementById("modalTimeIn").value;
             const timeOut = document.getElementById("modalTimeOut").value;
 
             if (resourceID && timeIn && timeOut) {
-                // Set default Time-in and Time-out from the first resource
                 if (personnelEntries.length === 0) {
                     defaultTimeIn = timeIn;
                     defaultTimeOut = timeOut;
                 }
 
-                personnelEntries.push({
-                    id: resourceID,
-                    timeIn: timeIn,
-                    timeOut: timeOut
-                });
+                personnelEntries.push({ id: resourceID, timeIn, timeOut });
                 updatePersonnelTable();
-                closeModal(); // Close the modal after adding
+                closeModal();
             } else {
                 alert("Please fill in all fields.");
             }
@@ -414,6 +477,11 @@
                 submitButton.innerText = "Submit";
             });
         };
+
+        // Close modal on outside click
+        document.getElementById("resourceModal").addEventListener("click", function(e) {
+            if (e.target === this) closeModal();
+        });
     </script>
 </body>
 </html>
