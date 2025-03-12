@@ -1,130 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<!-- saved from url=(0032)https://justingps.github.io/dpr/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>GPS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="UTF-8">
     <!-- Add Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="https://justingps.github.io/dpr/favicon.png">
     <style>
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
-            line-height: 1.6;
         }
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .header {
             display: flex;
             align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
+            margin-bottom: 20px;
         }
         .logo {
             max-width: 100px;
-            height: auto;
+            margin-right: 20px;
         }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
+            margin-bottom: 5px;
         }
         input[type="text"],
         input[type="date"],
-        input[type="time"],
         textarea,
         select {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             box-sizing: border-box;
             border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-        input:focus,
-        textarea:focus,
-        select:focus {
-            border-color: #4CAF50;
-            outline: none;
+            border-radius: 4px;
         }
         textarea {
             resize: vertical;
-            min-height: 100px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 12px;
+            padding: 8px;
             text-align: left;
-        }
-        th {
-            background-color: #f9f9f9;
-            font-weight: 600;
         }
         .btn {
             border: none;
             color: white;
-            padding: 12px 24px;
+            padding: 10px 20px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
             font-size: 16px;
             margin: 4px 2px;
             cursor: pointer;
-            border-radius: 6px;
-            transition: background-color 0.3s ease, transform 0.1s ease;
-        }
-        .btn:hover:not(:disabled) {
-            transform: translateY(-2px);
+            border-radius: 4px;
+            width: 180px;
         }
         .btn:disabled {
             background-color: #cccccc;
             cursor: not-allowed;
-            opacity: 0.7;
         }
         .btn-add {
             background-color: #4CAF50;
         }
-        .btn-add:hover:not(:disabled) {
-            background-color: #45a049;
-        }
         .btn-remove {
             background-color: #f44336;
-        }
-        .btn-remove:hover:not(:disabled) {
-            background-color: #da190b;
         }
         .resource-entry {
             display: flex;
             gap: 10px;
-            flex-wrap: wrap;
+            margin-bottom: 15px;
         }
         .resource-entry input {
             flex: 1;
-            min-width: 120px;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         .button-container {
             display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
         /* Modal Styles */
@@ -135,36 +103,29 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            transition: opacity 0.3s ease;
         }
         .modal-content {
             background-color: white;
-            padding: 25px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 350px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            animation: slideIn 0.3s ease-out;
-        }
-        @keyframes slideIn {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .modal-content label {
+            display: block;
             margin-bottom: 10px;
-            font-weight: 600;
+            font-weight: bold;
         }
         .modal-content input {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             box-sizing: border-box;
             border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-bottom: 20px;
+            border-radius: 4px;
+            margin-bottom: 15px;
         }
         .modal-buttons {
             display: flex;
@@ -172,99 +133,538 @@
             gap: 10px;
         }
         .modal-buttons button {
-            padding: 10px 20px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
         .modal-buttons .btn-confirm {
             background-color: #4CAF50;
             color: white;
         }
-        .modal-buttons .btn-confirm:hover {
-            background-color: #45a049;
-        }
         .modal-buttons .btn-cancel {
             background-color: #f44336;
             color: white;
         }
-        .modal-buttons .btn-cancel:hover {
-            background-color: #da190b;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            .header {
-                flex-direction: column;
-                text-align: center;
-            }
-            .logo {
-                margin-bottom: 15px;
-            }
-            .btn {
-                width: 100%;
-                box-sizing: border-box;
-            }
-            .resource-entry {
-                flex-direction: column;
-            }
-            .button-container {
-                flex-direction: column;
-            }
-        }
     </style>
-</head>
+<style type="text/css">.lf-progress {
+  -webkit-appearance: none;
+  -moz-apperance: none;
+  width: 100%;
+  /* margin: 0 10px; */
+  height: 4px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.lf-progress:focus {
+  outline: none;
+  border: none;
+}
+.lf-progress::-moz-range-track {
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+}
+.lf-progress::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-moz-range-thumb {
+  -moz-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-ms-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+.lf-progress::-ms-fill-lower {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-fill-upper {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-thumb {
+  border: 0;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress:focus::-ms-fill-lower {
+  background: #ccc;
+}
+.lf-progress:focus::-ms-fill-upper {
+  background: #ccc;
+}
+.lf-player-container :focus {
+  outline: 0;
+}
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-player-btn-container {
+  display: flex;
+  align-items: center;
+}
+.lf-player-btn {
+  cursor: pointer;
+  fill: #999;
+  width: 14px;
+}
+
+.lf-player-btn.active {
+  fill: #555;
+}
+
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  background-color: #ffffff;
+  opacity: 1;
+
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+  padding: 10px;
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-arrow {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  bottom: -9px;
+  border-style: solid;
+  border-width: 10px 10px 0px 10px;
+}
+
+.lf-left-align,
+.lf-left-align .lfarrow {
+  left: 0;
+  right: unset;
+}
+
+.lf-right-align,
+.lf-right-align .lf-arrow {
+  right: 0;
+  left: unset;
+}
+
+.lf-text-input {
+  border: 1px #ccc solid;
+  border-radius: 5px;
+  padding: 3px;
+  width: 60px;
+  margin: 0;
+}
+
+.lf-color-picker {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 90px;
+}
+
+.lf-color-selectors {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lf-color-component {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.lf-color-component strong {
+  width: 40px;
+}
+
+.lf-color-component input[type='range'] {
+  margin: 0 0 0 10px;
+}
+
+.lf-color-component input[type='number'] {
+  width: 50px;
+  margin: 0 0 0 10px;
+}
+
+.lf-color-preview {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5px;
+}
+
+.lf-preview {
+  height: 60px;
+  width: 60px;
+}
+
+.lf-popover-snapshot {
+  width: 150px;
+}
+.lf-popover-snapshot h5 {
+  margin: 5px 0 10px 0;
+  font-size: 0.75rem;
+}
+.lf-popover-snapshot a {
+  display: block;
+  text-decoration: none;
+}
+.lf-popover-snapshot a:before {
+  content: '⥼';
+  margin-right: 5px;
+}
+.lf-popover-snapshot .lf-note {
+  display: block;
+  margin-top: 10px;
+  color: #999;
+}
+.lf-player-controls > div {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.lf-player-controls > div:first-child {
+  margin-left: 0px;
+}
+.lf-player-controls > div:last-child {
+  margin-right: 0px;
+}
+</style><style type="text/css">.lf-progress {
+  -webkit-appearance: none;
+  -moz-apperance: none;
+  width: 100%;
+  /* margin: 0 10px; */
+  height: 4px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.lf-progress:focus {
+  outline: none;
+  border: none;
+}
+.lf-progress::-moz-range-track {
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+}
+.lf-progress::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-moz-range-thumb {
+  -moz-appearance: none !important;
+  height: 13px;
+  width: 13px;
+  border: 0;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress::-ms-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+.lf-progress::-ms-fill-lower {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-fill-upper {
+  background: #ccc;
+  border-radius: 3px;
+}
+.lf-progress::-ms-thumb {
+  border: 0;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  background: #0fccce;
+  cursor: pointer;
+}
+.lf-progress:focus::-ms-fill-lower {
+  background: #ccc;
+}
+.lf-progress:focus::-ms-fill-upper {
+  background: #ccc;
+}
+.lf-player-container :focus {
+  outline: 0;
+}
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-player-btn-container {
+  display: flex;
+  align-items: center;
+}
+.lf-player-btn {
+  cursor: pointer;
+  fill: #999;
+  width: 14px;
+}
+
+.lf-player-btn.active {
+  fill: #555;
+}
+
+.lf-popover {
+  position: relative;
+}
+
+.lf-popover-content {
+  display: inline-block;
+  position: absolute;
+  background-color: #ffffff;
+  opacity: 1;
+
+  transform: translate(0, -10px);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+  padding: 10px;
+}
+
+.lf-popover-content.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0px);
+}
+
+.lf-arrow {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  bottom: -9px;
+  border-style: solid;
+  border-width: 10px 10px 0px 10px;
+}
+
+.lf-left-align,
+.lf-left-align .lfarrow {
+  left: 0;
+  right: unset;
+}
+
+.lf-right-align,
+.lf-right-align .lf-arrow {
+  right: 0;
+  left: unset;
+}
+
+.lf-text-input {
+  border: 1px #ccc solid;
+  border-radius: 5px;
+  padding: 3px;
+  width: 60px;
+  margin: 0;
+}
+
+.lf-color-picker {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 90px;
+}
+
+.lf-color-selectors {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lf-color-component {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.lf-color-component strong {
+  width: 40px;
+}
+
+.lf-color-component input[type='range'] {
+  margin: 0 0 0 10px;
+}
+
+.lf-color-component input[type='number'] {
+  width: 50px;
+  margin: 0 0 0 10px;
+}
+
+.lf-color-preview {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5px;
+}
+
+.lf-preview {
+  height: 60px;
+  width: 60px;
+}
+
+.lf-popover-snapshot {
+  width: 150px;
+}
+.lf-popover-snapshot h5 {
+  margin: 5px 0 10px 0;
+  font-size: 0.75rem;
+}
+.lf-popover-snapshot a {
+  display: block;
+  text-decoration: none;
+}
+.lf-popover-snapshot a:before {
+  content: '⥼';
+  margin-right: 5px;
+}
+.lf-popover-snapshot .lf-note {
+  display: block;
+  margin-top: 10px;
+  color: #999;
+}
+.lf-player-controls > div {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.lf-player-controls > div:first-child {
+  margin-left: 0px;
+}
+.lf-player-controls > div:last-child {
+  margin-right: 0px;
+}
+</style></head>
 <body>
     <div class="container">
         <div class="header">
-            <img src="logo.png" alt="Logo" class="logo">
+            <img src="./GPS-DPR_files/logo.png" alt="Logo" class="logo">
             <div>
                 <h2>DAILY SITE REPORT</h2>
+                <!--  <p style="font-size: 14px; margin: 0;">Client: <span id="clientName">Occidental of Oman Inc.</span><br>Contract: <span id="contractName">General Facilities Service Contract.</span></p>  -->
             </div>
         </div>
 
-        <form id="reportForm" aria-label="Daily Site Report Form">
+        <form id="reportForm">
             <!-- Single Entry Fields -->
             <div class="form-group">
                 <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required aria-required="true">
+                <input type="date" id="date" name="date" required="">
             </div>
 
             <!-- Permit Details -->
             <div class="form-group">
-                <label for="permitNumber">Permit Details:</label>
+                <label for="permitDetails">Permit Details:</label>
                 <div class="resource-entry">
-                    <input type="text" id="permitNumber" placeholder="Permit Number" required aria-required="true">
-                    <input type="time" id="validationTime" placeholder="Validation Time" required aria-required="true">
-                    <input type="time" id="suspensionTime" placeholder="Suspension Time" required aria-required="true">
+                    <input type="text" id="permitNumber" placeholder="Permit Number" required="">
+                    <input type="time" id="validationTime" placeholder="Validation Time" required="">
+                    <input type="time" id="suspensionTime" placeholder="Suspension Time" required="">
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="foremanName">Foreman Name:</label>
-                <input type="text" id="foremanName" name="foremanName" required aria-required="true">
+                <input type="text" id="foremanName" name="foremanName" required="">
             </div>
             <div class="form-group">
                 <label for="foremanID">Foreman ID:</label>
-                <input type="text" id="foremanID" name="foremanID" required aria-required="true">
+                <input type="text" id="foremanID" name="foremanID" required="">
             </div>
             <div class="form-group">
                 <label for="wiReference">WI No:</label>
-                <input type="text" id="wiReference" name="wiReference" required aria-required="true">
+                <input type="text" id="wiReference" name="wiReference" required="">
             </div>
             <div class="form-group">
                 <label for="wiTitle">WI Title:</label>
-                <input type="text" id="wiTitle" name="wiTitle" required aria-required="true">
+                <input type="text" id="wiTitle" name="wiTitle" required="">
             </div>
 
             <!-- Discipline Dropdown -->
             <div class="form-group">
                 <label for="discipline">Discipline:</label>
-                <select id="discipline" name="discipline" required aria-required="true">
+                <select id="discipline" name="discipline" required="">
                     <option value="Other">Other</option>
                     <option value="Civil Works">Civil Works</option>
-                    <option value="Piping, Structural & Mechanical">Piping, Structural & Mechanical</option>
+                    <option value="Piping, Structural &amp; Mechanical">Piping, Structural &amp; Mechanical</option>
                     <option value="Electrical">Electrical</option>
                     <option value="Instrumentation">Instrumentation</option>
                     <option value="Commissioning">Commissioning</option>
@@ -277,13 +677,13 @@
 
             <div class="form-group">
                 <label for="description">Description of Work:</label>
-                <textarea id="description" name="description" rows="4" required aria-required="true"></textarea>
+                <textarea id="description" name="description" rows="4" required=""></textarea>
             </div>
 
             <!-- Resource Details -->
             <div class="form-group">
-                <label for="personnelTable">Resource Details:</label>
-                <table id="personnelTable" aria-label="Resource Details Table">
+                <label for="resourceDetails">Resource Details:</label>
+                <table id="personnelTable">
                     <thead>
                         <tr>
                             <th>Resource ID</th>
@@ -296,16 +696,16 @@
                     </tbody>
                 </table>
                 <div class="button-container">
-                    <button type="button" class="btn btn-add" onclick="openModal()" aria-label="Add Resource">Add Resource</button>
-                    <button type="button" class="btn btn-remove" onclick="removeLastPersonnel()" aria-label="Remove Last Resource">Remove</button>
+                    <button type="button" class="btn btn-add" onclick="openModal()">Add Resource</button>
+                    <button type="button" class="btn btn-remove" onclick="removeLastPersonnel()">Remove</button>
                 </div>
             </div>
 
             <!-- Issues & Delays -->
             <div class="form-group">
-                <label for="issuesDelays">Issues & Delays:</label>
-                <select id="issuesDelays" required aria-required="true">
-                    <option value="Normal" selected>Normal</option>
+                <label for="issuesDelays">Issues &amp; Delays:</label>
+                <select id="issuesDelays" required="">
+                    <option value="Normal" selected="">Normal</option>
                     <option value="Technical Challenges">Technical Challenges</option>
                     <option value="Weather Delays">Weather Delays</option>
                     <option value="Material / Equipment Shortage">Material / Equipment Shortage</option>
@@ -319,33 +719,32 @@
                 </select>
             </div>
 
-            <!-- Notes -->
+            <!-- Notes
             <div class="form-group">
                 <label for="notes">Notes (Optional):</label>
-                <textarea id="notes" name="notes" rows="4" aria-label="Optional Notes"></textarea>
-            </div>
+                <textarea id="notes" name="notes" rows="4"></textarea>
+            </div> -->
 
             <!-- Submit Button -->
-            <button type="submit" class="btn btn-add" id="submitButton" aria-label="Submit Report">Submit</button>
+            <button type="submit" class="btn btn-add" id="submitButton">Submit</button>
         </form>
     </div>
 
     <!-- Modal for Resource Details Input -->
-    <div id="resourceModal" class="modal" role="dialog" aria-labelledby="resourceModalTitle">
+    <div id="resourceModal" class="modal">
         <div class="modal-content">
-            <h3 id="resourceModalTitle" style="margin-top: 0;">Add Resource</h3>
             <label for="modalResourceID">Resource ID:</label>
-            <input type="text" id="modalResourceID" placeholder="Enter Resource ID" required aria-required="true">
+            <input type="text" id="modalResourceID" placeholder="Enter Resource ID" required="">
 
             <label for="modalTimeIn">Time-in:</label>
-            <input type="time" id="modalTimeIn" placeholder="Enter Time-in" required aria-required="true">
+            <input type="time" id="modalTimeIn" placeholder="Enter Time-in" required="">
 
             <label for="modalTimeOut">Time-out:</label>
-            <input type="time" id="modalTimeOut" placeholder="Enter Time-out" required aria-required="true">
+            <input type="time" id="modalTimeOut" placeholder="Enter Time-out" required="">
 
             <div class="modal-buttons">
-                <button class="btn-confirm" onclick="addResource()" aria-label="Confirm Resource Addition">Confirm</button>
-                <button class="btn-cancel" onclick="closeModal()" aria-label="Cancel Resource Addition">Cancel</button>
+                <button class="btn-confirm" onclick="addResource()">Confirm</button>
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
             </div>
         </div>
     </div>
@@ -357,37 +756,42 @@
 
         // Function to open the modal
         function openModal() {
+            // Set default Time-in and Time-out if available
             if (defaultTimeIn && defaultTimeOut) {
                 document.getElementById("modalTimeIn").value = defaultTimeIn;
                 document.getElementById("modalTimeOut").value = defaultTimeOut;
             }
             document.getElementById("resourceModal").style.display = "flex";
-            document.getElementById("modalResourceID").focus();
         }
 
         // Function to close the modal
         function closeModal() {
             document.getElementById("resourceModal").style.display = "none";
-            document.getElementById("modalResourceID").value = "";
-            document.getElementById("modalTimeIn").value = "";
-            document.getElementById("modalTimeOut").value = "";
+            document.getElementById("modalResourceID").value = ""; // Clear input
+            document.getElementById("modalTimeIn").value = ""; // Reset
+            document.getElementById("modalTimeOut").value = ""; // Reset
         }
 
         // Add resource to the table
         function addResource() {
-            const resourceID = document.getElementById("modalResourceID").value.trim();
+            const resourceID = document.getElementById("modalResourceID").value;
             const timeIn = document.getElementById("modalTimeIn").value;
             const timeOut = document.getElementById("modalTimeOut").value;
 
             if (resourceID && timeIn && timeOut) {
+                // Set default Time-in and Time-out from the first resource
                 if (personnelEntries.length === 0) {
                     defaultTimeIn = timeIn;
                     defaultTimeOut = timeOut;
                 }
 
-                personnelEntries.push({ id: resourceID, timeIn, timeOut });
+                personnelEntries.push({
+                    id: resourceID,
+                    timeIn: timeIn,
+                    timeOut: timeOut
+                });
                 updatePersonnelTable();
-                closeModal();
+                closeModal(); // Close the modal after adding
             } else {
                 alert("Please fill in all fields.");
             }
@@ -476,11 +880,8 @@
                 submitButton.innerText = "Submit";
             });
         };
-
-        // Close modal on outside click
-        document.getElementById("resourceModal").addEventListener("click", function(e) {
-            if (e.target === this) closeModal();
-        });
     </script>
+
+
 </body>
 </html>
