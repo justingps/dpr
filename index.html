@@ -234,7 +234,7 @@
                 <label for="discipline">Discipline:</label>
                 <select id="discipline" name="discipline" required>
                     <option value="" disabled selected>Select Discipline</option>
-                    <option value="Civil Works">Civil Works</option>
+                    <option value="Civil">Civil</option>
                     <option value="Piping, Structural & Mechanical">Piping, Structural & Mechanical</option>
                     <option value="Electrical">Electrical</option>
                     <option value="Instrumentation">Instrumentation</option>
@@ -326,14 +326,14 @@
             <label for="modalProgressDiscipline">Discipline:</label>
             <select id="modalProgressDiscipline" onchange="updateActivityDropdown()" required>
                 <option value="" disabled selected>Select Discipline</option>
-                <option value="CIVIL">CIVIL</option>
-                <option value="PIPING STRUCTURAL & MECHANICAL">PIPING STRUCTURAL & MECHANICAL</option>
-                <option value="ELECTRICAL">ELECTRICAL</option>
-                <option value="INSTRUMENTATION">INSTRUMENTATION</option>
-                <option value="COMMISSIONING">COMMISSIONING</option>
-                <option value="SCAFFOLDING">SCAFFOLDING</option>
-                <option value="DEMOLITION">DEMOLITION</option>
-                <option value="SHUTDOWN">SHUTDOWN</option>
+                <option value="Civil">Civil</option>
+                <option value="Piping &amp; Mechanical">Piping &amp; Mechanical</option>
+                <option value="Electrical">Electrical</option>
+                <option value="Instrumentation">Instrumentation</option>
+                <option value="Commissioning">Commissioning</option>
+                <option value="Scaffolding">Scaffolding</option>
+                <option value="Demolition/Shutdown">Demolition/Shutdown</option>
+                <option value="Shop">Shop</option>
             </select>
 
             <label for="modalActivity">Activity:</label>
@@ -350,13 +350,13 @@
             <label for="modalUnit">Unit:</label>
             <select id="modalUnit" required>
                 <option value="" disabled selected>Select Unit</option>
-                <option value="M">M</option>
+                <option value="Meter">Meter</option>
                 <option value="M2">M2</option>
                 <option value="M3">M3</option>
-                <option value="NO">NO</option>
-                <option value="T">T</option>
-                <option value="KG">KG</option>
-                <option value="IN. DIA">IN. DIA</option>
+                <option value="No">No</option>
+                <option value="Ton">Ton</option>
+                <option value="Kg">Kg</option>
+                <option value="In. Dia">In. Dia</option>
             </select>
 
             <div class="modal-buttons">
@@ -375,98 +375,112 @@
 
         // Activity lists based on discipline
         const activities = {
-            "CIVIL": [
-                "SURVEY & MARKING",
-                "TRIAL PIT EXCAVATION",
-                "EXCAVATION (MANUAL)",
-                "EXCAVATION (MECHANICAL)",
-                "PROTECTIVE COATING",
-                "FOUNDATION INSTALLATION",
-                "BACKFILLING",
-                "COMPACTION",
-                "REINFORCEMENT",
-                "FORMWORK",
-                "CONCRETING",
-                "CORE DRILLING"
+            "Civil": [
+                "Survey & Marking",
+                "Trial Pit Excavation",
+                "Excavation (Manual)",
+                "Excavation (Mechanical)",
+                "Trench Excavation (Manual)",
+                "Trench Excavation (Mechanical)",
+                "PCC",
+                "Foundation Installation",
+                "In-Situ Casting",
+                "Protective Coating",
+                "Backfilling",
+                "Compaction"
             ],
-            "PIPING STRUCTURAL & MECHANICAL": [
-                "PIPING ERECTION",
-                "FLOWLINE ERECTION",
-                "FLOWLINE WELDING",
-                "NDT",
-                "HYDROTESTING",
-                "REINSTATEMENT OF SPOOLS",
-                "TORQUING",
-                "SUPPORT STRUCTURE INSTALLATION",
-                "SUPPORT STRUCTURE FABRICATION",
-                "PAINTING",
-                "PIPING FABRICATION",
-                "EXTERNAL PAINTING",
-                "SPOOLS INSTALLATION",
-                "SHOP WELD",
-                "FIELD WELDING",
-                "VALVES INSTALLATION",
-                "REINSTATEMENT"
+            "Piping & Mechanical": [
+                "Piping Spool Erection",
+                "Piping Field Welding",
+                "Valve Erection",
+                "Flowline/Pipeline Stringing",
+                "Flowline/Pipeline Erection",
+                "Flowline/Pipeline Welding",
+                "Valve Hydrotesting",
+                "Field Hydrotesting",
+                "Flange Torquing",
+                "Support Structure Installation"
             ],
-            "ELECTRICAL": [
-                "HV CABLE LAYING | 3C X 70 SQMM",
-                "HV CABLE LAYING | 3C X 50 SQMM",
-                "LV CABLE LAYING | 3C X 240 SQMM,",
-                "LV CABLE LAYING | 3C X185 SQMM",
-                "LV CABLE LAYING | 3C X 120 SQMM",
-                "LV CABLE LAYING | 3C X 50 SQMM",
-                "LV CABLE LAYING | 3C X 35 SQMM,",
-                "LV CABLE LAYING | 3C X 25 SQMM",
-                "LV CABLE LAYING | 3C X 16 SQM",
-                "LV CABLE LAYING | 3C X 4 SQMM",
-                "LV CABLE LAYING | 3C X 2.5 SQMM",
-                "LV CABLE LAYING | 4C X 150 SQMM",
-                "LV CABLE LAYING | 4C X 70 SQMM",
-                "LV CABLE LAYING | 4C X 25 SQMM",
-                "LV CABLE LAYING | 4C X 16 SQMM",
-                "LV CABLE LAYING | 4C X 10 SQMM",
-                "LV CABLE LAYING | 4C X 6 SQMM",
-                "LV CABLE LAYING | 7C X 2.5 SQMM",
-                "LV CABLE LAYING | 12C X2.5 SQMM",
-                "LV CABLE LAYING | 19C X2.5 SQMM",
-                "LV CABLE LAYING | 5C X2.5 SQMM",
-                "LV CABLE LAYING | 2C X4 SQMM",
-                "LV CABLE LAYING | 2C X2.5 SQMM",
-                "LV CABLE LAYING | 2 PAIR X 2.5 SQ.MM",
-                "LV CABLE LAYING | 20 PAIR X 1.5 SQ.MM"
+            "Electrical": [
+                "HV Cable Laying",
+                "LV Cable Laying",
+                "HV Glanding & Termination",
+                "LV Glanding & Termination",
+                "Straight Through Joints",
+                "Earth Pits",
+                "Earth Bus Bar",
+                "Earth Cables Laying ",
+                "Earth Cables Termination)",
+                "Branch Connectors",
+                "Flexible Braided Jumpers",
+                "PVC Pipe Installation",
+                "Concrete Duct Banks",
+                "Indoor Lighting",
+                "Outdoor Lighting",
+                "Exit Sign Lights",
+                "Power Receptacles & Sockets",
+                "Exhaust Fans",
+                "Air Conditioners",
+                "Disconnector with Support Structure",
+                "Lighting Poles ",
+                "JB Installation",
+                "DB Installation",
+                "VFD",
+                "Control Panels",
+                "Switchgear",
+                "Transformers",
+                "OHL Guard Poles",
+                "OHL Conductors",
+                "OHL Concrete Pole Installation",
+                "OHL Wooden Pole Installation",
+                "Perforated Trays with Cover",
+                "Ladder Trays with Cover",
+                "Cable Tray Supports",
+                "Nameplates",
+                "Kopex Conduit",
+                "Concrete Block Installation"
             ],
-            "INSTRUMENTATION": [
-                "CABEL LAYING |1 PAIR X1.5 SQMM",
-                "CABEL LAYING |2 PAIR X1.5 SQMM",
-                "CABEL LAYING |5 PAIR X.75 SQMM",
-                "CABEL LAYING |5 PAIR X1.5 SQMM",
-                "CABEL LAYING |10 PAIR X1 SQMM",
-                "CABEL LAYING |10 PAIR X1.5 SQMM",
-                "CABEL LAYING |20 PAIR X1.5 SQMM",
-                "CABEL LAYING |2 CORE X 2.5 SQ MM",
-                "CABEL LAYING |21COREX2.5 SQ.MM",
-                "CABEL LAYING |FOC 4 CORE",
-                "CABEL LAYING |FOC 12 CORE",
-                "CABEL LAYING |FOC 24 CORE",
-                "CABEL LAYING |CAT-6/6E",
-                "CABEL LAYING |MODBUS RS-485"
+            "Instrumentation": [
+                "Cable Laying (Various types: power, control, fiber optic, communication)",
+                "Glanding & Termination (For different cable specifications)",
+                "Earth Cable Laying & Termination",
+                "Branch Connector Installation",
+                "Conduits & Pipes Installation",
+                "Junction Box (JB) Installation & Supports",
+                "Panel Installation (IFB, PLC, RTU, FO Patch, Telecom)",
+                "Concrete Duct & Block Installation",
+                "Name Plate Installation",
+                "Kopex Conduit Installation",
+                "Cable Tray & Supports Installation (Perforated, Ladder, Covers)",
+                "Instrument Installation (Transmitters, Gauges, Indicators)",
+                "Fire & Gas (F&G) Installation (Detectors, Sirens, Beacons)",
+                "Support Installations (For F&G equipment)",
+                "PLC Installation & Wiring (Relays, I/O Cards, Modules, Power Supply)",
+                "Tubing Installation (Connectors, Valves, Manifolds)",
+                "Function Testing & Calibration (Instruments, F&G, Valves)"
             ],
-            "COMMISSIONING": [
-                "LOOP TESTING",
-                "FUNCTION TEST",
-                "CALIBRATION"
+            "Commissioning": [
+                "Loop Testing",
+                "Function Test",
+                "Calibration"
             ],
-            "SCAFFOLDING": [
-                "ERECTION",
-                "DISMANTLING"
+            "Scaffolding": [
+                "Erection",
+                "Dismantling"
             ],
-            "DEMOLITION": [
-                "FOUNDATION",
-                "CABLES",
-                "INSTRUMENTS"
+            "Demolition/Shutdown": [
+                "Foundation",
+                "Cables",
+                "Instruments"
             ],
-            "SHUTDOWN": [
-                "TIE-INS"
+            "Shop": [
+                "Piping Spool Fabrication",
+                "Hydrotesting Of Pipe Spools",
+                "Blasting & Painting Pipe Spools",
+                "Support Structure Fabrication",
+                "Blasting & Painting of Structures",
+                "Reinforcement Work for Foundations",
+                "Pres-Casting and Coating of Foundations"
             ]
         };
 
@@ -648,6 +662,12 @@
             // Validate at least one resource entry
             if (personnelEntries.length === 0) {
                 alert("Please add at least one resource entry.");
+                return;
+            }
+
+            // Validate at least one progress entry
+            if (progressEntries.length === 0) {
+                alert("Please add at least one progress entry.");
                 return;
             }
 
