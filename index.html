@@ -212,7 +212,7 @@
             </div>
 
             <div class="form-group">
-                <label>Permit Details:</label>
+                <label>Permit Number, Validation Time, Suspension Time :</label>
                 <div class="resource-entry">
                     <input type="text" id="permitNumber" placeholder="Permit Number" required>
                     <input type="time" id="validationTime" placeholder="Validation Time" required>
@@ -231,28 +231,23 @@
             </div>
 
             <div class="form-group">
-                <label for="discipline">Discipline:</label>
+                <label for="discipline">Area / Block:</label>
                 <select id="discipline" name="discipline" required>
-                    <option value="" disabled selected>Select Discipline</option>
-                    <option value="Civil">Civil</option>
-                    <option value="Piping, Structural & Mechanical">Piping, Structural & Mechanical</option>
-                    <option value="Electrical">Electrical</option>
-                    <option value="Instrumentation">Instrumentation</option>
-                    <option value="Commissioning">Commissioning</option>
-                    <option value="Scaffolding">Scaffolding</option>
-                    <option value="Vendor Support">Vendor Support</option>
-                    <option value="Demolition">Demolition</option>
-                    <option value="Shutdown">Shutdown</option>
+                    <option value="" disabled selected>Select Area / Block</option>
+                    <option value="Safha (Block-9)">Safha (Block-9)</option>
+                    <option value="Wadi Latham (Block-9)">Wadi Latham (Block-9)</option>
+                    <option value="Khamila (Bock-27)">Khamila (Bock-27)</option>
+                    <option value="Block-62">Block-62</option>
+                    <option value="FRT Project">FRT Project</option>
+                    <option value="Power Project">Power Project</option>
+                    <option value="Infrastructure Project">Infrastructure Project</option>
                     <option value="Other">Other</option>
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="description">Description of Work:</label>
-                <textarea id="description" name="description" placeholder="Describe the work performed today" required></textarea>
-            </div>
+            
 
-            <div class="section-title">Resource Details</div>
+            <div class="section-title">Manpower & Plant Equipment Details</div>
             <div class="form-group">
                 <table id="personnelTable">
                     <thead>
@@ -293,7 +288,12 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-add" id="submitButton">Submit Daily Report</button>
+            <div class="form-group">
+                <label for="description">Description of Work:</label>
+                <textarea id="description" name="description" placeholder="Describe the work performed today" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-add" id="submitButton">Submit</button>
         </form>
     </div>
 
@@ -661,13 +661,13 @@
 
             // Validate at least one resource entry
             if (personnelEntries.length === 0) {
-                alert("Please add at least one resource entry.");
+                alert("Add Resource Entry.");
                 return;
             }
 
             // Validate at least one progress entry
             if (progressEntries.length === 0) {
-                alert("Please add at least one progress entry.");
+                alert("Add Progress Entry.");
                 return;
             }
 
@@ -705,7 +705,7 @@
             }
 
             // Submit to Google Apps Script endpoint
-            fetch(`https://script.google.com/macros/s/AKfycbzR8iVBfg4fqXv9v1pWhGQ56DZ844qsVvjM-D4VMN19BeCT-ISid02kRqJuccVRnstI2w/exec?${queryParams.toString()}`, {
+            fetch(`https://script.google.com/macros/s/AKfycbxO0pWIOFOwLOnTHd7FtrGNItxDI_VWOuv01o1c2wdxSTXdTDz3NNEkeFwQJikqHCNyNA/exec?${queryParams.toString()}`, {
                 method: "GET",
             })
             .then(response => response.text())
@@ -729,7 +729,7 @@
             })
             .finally(() => {
                 submitButton.disabled = false;
-                submitButton.innerText = "Submit Daily Report";
+                submitButton.innerText = "Submit";
             });
         };
     </script>
