@@ -299,8 +299,8 @@
             <div class="form-group">
                 <label for="wiReference">Work Instruction No:</label>
                 <div class="autocomplete">
-                    <input type="text" id="wiReference" name="wiReference" placeholder="Enter WI Number" required>
-                    <div class="error-message" id="wiReference-error">Please enter work instruction number</div>
+                    <input type="text" id="wiReference" name="wiReference" placeholder="Enter WI Number" required onkeypress="return validateWIInput(event)">
+                    <div class="error-message" id="wiReference-error">Please enter work instruction number (only numbers, D, V, and comma allowed)</div>
                 </div>
             </div>
 
@@ -826,6 +826,52 @@
             return true;
         }
 
+        // NEW FUNCTION: Validate WI Input (allows numbers, D, V, and comma)
+        function validateWIInput(evt) {
+            const charCode = (evt.which) ? evt.which : evt.keyCode;
+            
+            // Allow: numbers (48-57), comma (44), uppercase D (68), lowercase d (100), 
+            // uppercase V (86), lowercase v (118)
+            if (charCode === 44 || // comma
+                (charCode >= 48 && charCode <= 57) || // numbers 0-9
+                charCode === 68 || charCode === 100 || // D or d
+                charCode === 86 || charCode === 118) { // V or v
+                return true;
+            }
+            
+            // Also allow these special keys: backspace, delete, tab, escape, enter
+            if (charCode === 8 || charCode === 46 || charCode === 9 || 
+                charCode === 27 || charCode === 13) {
+                return true;
+            }
+            
+            // Also allow arrow keys and home/end
+            if (charCode >= 35 && charCode <= 40) {
+                return true;
+            }
+            
+            // Prevent any other characters
+            evt.preventDefault();
+            showWIWarning();
+            return false;
+        }
+
+        // NEW FUNCTION: Show warning for invalid WI input
+        function showWIWarning() {
+            const wiInput = document.getElementById("wiReference");
+            const errorElement = document.getElementById("wiReference-error");
+            
+            wiInput.classList.add("error-field");
+            errorElement.textContent = "Only numbers, letters D/V, and comma are allowed";
+            errorElement.style.display = "block";
+            
+            // Hide the warning after 3 seconds
+            setTimeout(() => {
+                errorElement.style.display = "none";
+                wiInput.classList.remove("error-field");
+            }, 3000);
+        }
+
         // Autocomplete functions
         function initAutocomplete(input, arr) {
             input.addEventListener("input", function(e) {
@@ -888,6 +934,26 @@
                     field.addEventListener('change', function() {
                         validateField(fieldId);
                     });
+                    
+                    // Special validation for WI Reference on paste
+                    if (fieldId === 'wiReference') {
+                        field.addEventListener('paste', function(e) {
+                            // Get pasted data
+                            const pastedData = e.clipboardData.getData('text');
+                            
+                            // Validate pasted data
+                            const validChars = /^[0-9,DVdv,]*$/;
+                            if (!validChars.test(pastedData)) {
+                                e.preventDefault();
+                                showWIWarning();
+                            }
+                        });
+                        
+                        // Validate on blur as well
+                        field.addEventListener('blur', function() {
+                            validateField(fieldId);
+                        });
+                    }
                 }
             });
         }
@@ -916,6 +982,21 @@
             
             if (fieldId === 'foremanID' && field.value.trim() !== '') {
                 isValid = !/\s/.test(field.value.trim());
+            }
+            
+            // NEW: Validation for WI Reference
+            if (fieldId === 'wiReference' && field.value.trim() !== '') {
+                // Check if the value contains only allowed characters
+                const validChars = /^[0-9,DVdv,]*$/;
+                isValid = validChars.test(field.value.trim());
+                
+                if (!isValid) {
+                    // Show specific error message for invalid characters
+                    errorElement.textContent = "Only numbers, letters D/V, and comma are allowed";
+                } else {
+                    // Reset to default error message
+                    errorElement.textContent = "Please enter work instruction number";
+                }
             }
             
             if (isValid) {
